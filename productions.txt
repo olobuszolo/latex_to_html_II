@@ -1,0 +1,63 @@
+1. expression -> expression PLUS term
+2. expression -> expression MINUS term
+3. expression -> term
+
+4. term -> term TIMES factor
+5. term -> term DIVIDE factor
+6. term -> factor
+
+7. factor -> NUMBER
+8. factor -> VARIABLE
+9. factor -> LPAREN expression RPAREN
+10. factor -> LBRACE expression RBRACE
+
+11. factor -> trigonometric_function LPAREN expression RPAREN
+   trigonometric_function -> SIN
+   trigonometric_function -> COS
+   trigonometric_function -> TAN
+
+12. factor -> logarithmic_function LPAREN expression RPAREN
+   logarithmic_function -> LOG
+   logarithmic_function -> LN
+
+13. factor -> SQRT LBRACE expression RBRACE
+
+14. factor -> FRAC LBRACE expression RBRACE LBRACE expression RBRACE
+
+15. factor -> integral_expression
+   integral_expression -> INT factor
+   integral_expression -> INT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
+   integral_expression -> IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
+   integral_expression -> IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
+
+16. expression -> expression logical_operator expression
+   logical_operator -> AND
+   logical_operator -> OR
+   logical_operator -> XOR
+   logical_operator -> NAND
+   logical_operator -> NOR
+   logical_operator -> IMPLIES
+   logical_operator -> IFF
+
+17. expression -> NOT expression
+
+18. expression -> expression comparison_operator expression
+   comparison_operator -> GEQ
+   comparison_operator -> LEQ
+   comparison_operator -> NEQ
+   comparison_operator -> IN
+   comparison_operator -> NOTIN
+
+19. factor -> greek_letter
+   greek_letter -> ALPHA
+   greek_letter -> BETA
+   greek_letter -> GAMMA
+   greek_letter -> DELTA
+
+20. factor -> quantifier_expression
+   quantifier_expression -> FORALL VARIABLE EXISTS VARIABLE
+
+21. expression -> expression SUP expression
+
+
+start = 'expression'
