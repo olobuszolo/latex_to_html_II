@@ -5,7 +5,7 @@ tokens = (
     'NUMBER', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'LPAREN', 'RPAREN',
     'SIN', 'COS', 'TAN', 'LOG', 'SQRT', 'FRAC', 'LBRACE', 'RBRACE',
     'INT', 'IINT', 'IIINT', 'SUP', 'VARIABLE',
-    'ALPHA', 'BETA', 'GAMMA', 'DELTA', 'PI'
+    'ALPHA', 'BETA', 'GAMMA', 'DELTA', 'PI', 'NEWLINE'
 )
 
 t_PLUS = r'\+'
@@ -32,6 +32,8 @@ t_BETA = r'\\beta'
 t_GAMMA = r'\\gamma'
 t_DELTA = r'\\delta'
 t_PI = r'\\pi'
+t_NEWLINE = r'\\\\'
+
 
 t_ignore = ' \t'
 

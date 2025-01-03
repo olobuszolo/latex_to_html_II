@@ -27,6 +27,8 @@ Rule 21    factor -> BETA
 Rule 22    factor -> GAMMA
 Rule 23    factor -> DELTA
 Rule 24    factor -> PI
+Rule 25    factor -> MINUS factor
+Rule 26    expression -> expression NEWLINE expression
 
 Terminals, with rules where they appear
 
@@ -43,7 +45,8 @@ INT                  : 16 17
 LBRACE               : 14 15 15 17 17 18 18 19 19
 LOG                  : 13
 LPAREN               : 9 10 11 12 13
-MINUS                : 2
+MINUS                : 2 25
+NEWLINE              : 26
 NUMBER               : 7
 PI                   : 24
 PLUS                 : 1
@@ -59,8 +62,8 @@ error                :
 
 Nonterminals, with rules where they appear
 
-expression           : 1 2 9 10 11 12 13 14 15 15 17 17 17 18 18 18 19 19 19 0
-factor               : 4 5 6 16
+expression           : 1 2 9 10 11 12 13 14 15 15 17 17 17 18 18 18 19 19 19 26 26 0
+factor               : 4 5 6 16 25
 term                 : 1 2 3 4 5
 
 Parsing method: LALR
@@ -71,6 +74,7 @@ state 0
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -92,37 +96,41 @@ state 0
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
     expression                     shift and go to state 1
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
 state 1
 
     (0) S' -> expression .
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
 
 state 2
@@ -135,11 +143,12 @@ state 2
   ! shift/reduce conflict for DIVIDE resolved as shift
     PLUS            reduce using rule 3 (expression -> term .)
     MINUS           reduce using rule 3 (expression -> term .)
+    NEWLINE         reduce using rule 3 (expression -> term .)
     $end            reduce using rule 3 (expression -> term .)
     RPAREN          reduce using rule 3 (expression -> term .)
     RBRACE          reduce using rule 3 (expression -> term .)
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 24
+    TIMES           shift and go to state 25
+    DIVIDE          shift and go to state 26
 
   ! TIMES           [ reduce using rule 3 (expression -> term .) ]
   ! DIVIDE          [ reduce using rule 3 (expression -> term .) ]
@@ -147,18 +156,63 @@ state 2
 
 state 3
 
+    (25) factor -> MINUS . factor
+    (7) factor -> . NUMBER
+    (8) factor -> . VARIABLE
+    (9) factor -> . LPAREN expression RPAREN
+    (10) factor -> . SIN LPAREN expression RPAREN
+    (11) factor -> . COS LPAREN expression RPAREN
+    (12) factor -> . TAN LPAREN expression RPAREN
+    (13) factor -> . LOG LPAREN expression RPAREN
+    (14) factor -> . SQRT LBRACE expression RBRACE
+    (15) factor -> . FRAC LBRACE expression RBRACE LBRACE expression RBRACE
+    (16) factor -> . INT factor
+    (17) factor -> . INT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
+    (18) factor -> . IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
+    (19) factor -> . IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
+    (20) factor -> . ALPHA
+    (21) factor -> . BETA
+    (22) factor -> . GAMMA
+    (23) factor -> . DELTA
+    (24) factor -> . PI
+    (25) factor -> . MINUS factor
+
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
+
+    factor                         shift and go to state 27
+
+state 4
+
     (6) term -> factor .
 
     TIMES           reduce using rule 6 (term -> factor .)
     DIVIDE          reduce using rule 6 (term -> factor .)
     PLUS            reduce using rule 6 (term -> factor .)
     MINUS           reduce using rule 6 (term -> factor .)
+    NEWLINE         reduce using rule 6 (term -> factor .)
     $end            reduce using rule 6 (term -> factor .)
     RPAREN          reduce using rule 6 (term -> factor .)
     RBRACE          reduce using rule 6 (term -> factor .)
 
 
-state 4
+state 5
 
     (7) factor -> NUMBER .
 
@@ -166,12 +220,13 @@ state 4
     DIVIDE          reduce using rule 7 (factor -> NUMBER .)
     PLUS            reduce using rule 7 (factor -> NUMBER .)
     MINUS           reduce using rule 7 (factor -> NUMBER .)
+    NEWLINE         reduce using rule 7 (factor -> NUMBER .)
     $end            reduce using rule 7 (factor -> NUMBER .)
     RPAREN          reduce using rule 7 (factor -> NUMBER .)
     RBRACE          reduce using rule 7 (factor -> NUMBER .)
 
 
-state 5
+state 6
 
     (8) factor -> VARIABLE .
 
@@ -179,17 +234,19 @@ state 5
     DIVIDE          reduce using rule 8 (factor -> VARIABLE .)
     PLUS            reduce using rule 8 (factor -> VARIABLE .)
     MINUS           reduce using rule 8 (factor -> VARIABLE .)
+    NEWLINE         reduce using rule 8 (factor -> VARIABLE .)
     $end            reduce using rule 8 (factor -> VARIABLE .)
     RPAREN          reduce using rule 8 (factor -> VARIABLE .)
     RBRACE          reduce using rule 8 (factor -> VARIABLE .)
 
 
-state 6
+state 7
 
     (9) factor -> LPAREN . expression RPAREN
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -211,72 +268,74 @@ state 6
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 25
+    expression                     shift and go to state 28
     term                           shift and go to state 2
-    factor                         shift and go to state 3
-
-state 7
-
-    (10) factor -> SIN . LPAREN expression RPAREN
-
-    LPAREN          shift and go to state 26
-
+    factor                         shift and go to state 4
 
 state 8
 
-    (11) factor -> COS . LPAREN expression RPAREN
-
-    LPAREN          shift and go to state 27
-
-
-state 9
-
-    (12) factor -> TAN . LPAREN expression RPAREN
-
-    LPAREN          shift and go to state 28
-
-
-state 10
-
-    (13) factor -> LOG . LPAREN expression RPAREN
+    (10) factor -> SIN . LPAREN expression RPAREN
 
     LPAREN          shift and go to state 29
 
 
+state 9
+
+    (11) factor -> COS . LPAREN expression RPAREN
+
+    LPAREN          shift and go to state 30
+
+
+state 10
+
+    (12) factor -> TAN . LPAREN expression RPAREN
+
+    LPAREN          shift and go to state 31
+
+
 state 11
 
-    (14) factor -> SQRT . LBRACE expression RBRACE
+    (13) factor -> LOG . LPAREN expression RPAREN
 
-    LBRACE          shift and go to state 30
+    LPAREN          shift and go to state 32
 
 
 state 12
 
-    (15) factor -> FRAC . LBRACE expression RBRACE LBRACE expression RBRACE
+    (14) factor -> SQRT . LBRACE expression RBRACE
 
-    LBRACE          shift and go to state 31
+    LBRACE          shift and go to state 33
 
 
 state 13
+
+    (15) factor -> FRAC . LBRACE expression RBRACE LBRACE expression RBRACE
+
+    LBRACE          shift and go to state 34
+
+
+state 14
 
     (16) factor -> INT . factor
     (17) factor -> INT . LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
@@ -298,43 +357,45 @@ state 13
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    LBRACE          shift and go to state 33
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    LBRACE          shift and go to state 36
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    factor                         shift and go to state 32
-
-state 14
-
-    (18) factor -> IINT . LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
-
-    LBRACE          shift and go to state 34
-
+    factor                         shift and go to state 35
 
 state 15
 
-    (19) factor -> IIINT . LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
+    (18) factor -> IINT . LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
 
-    LBRACE          shift and go to state 35
+    LBRACE          shift and go to state 37
 
 
 state 16
+
+    (19) factor -> IIINT . LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
+
+    LBRACE          shift and go to state 38
+
+
+state 17
 
     (20) factor -> ALPHA .
 
@@ -342,12 +403,13 @@ state 16
     DIVIDE          reduce using rule 20 (factor -> ALPHA .)
     PLUS            reduce using rule 20 (factor -> ALPHA .)
     MINUS           reduce using rule 20 (factor -> ALPHA .)
+    NEWLINE         reduce using rule 20 (factor -> ALPHA .)
     $end            reduce using rule 20 (factor -> ALPHA .)
     RPAREN          reduce using rule 20 (factor -> ALPHA .)
     RBRACE          reduce using rule 20 (factor -> ALPHA .)
 
 
-state 17
+state 18
 
     (21) factor -> BETA .
 
@@ -355,12 +417,13 @@ state 17
     DIVIDE          reduce using rule 21 (factor -> BETA .)
     PLUS            reduce using rule 21 (factor -> BETA .)
     MINUS           reduce using rule 21 (factor -> BETA .)
+    NEWLINE         reduce using rule 21 (factor -> BETA .)
     $end            reduce using rule 21 (factor -> BETA .)
     RPAREN          reduce using rule 21 (factor -> BETA .)
     RBRACE          reduce using rule 21 (factor -> BETA .)
 
 
-state 18
+state 19
 
     (22) factor -> GAMMA .
 
@@ -368,12 +431,13 @@ state 18
     DIVIDE          reduce using rule 22 (factor -> GAMMA .)
     PLUS            reduce using rule 22 (factor -> GAMMA .)
     MINUS           reduce using rule 22 (factor -> GAMMA .)
+    NEWLINE         reduce using rule 22 (factor -> GAMMA .)
     $end            reduce using rule 22 (factor -> GAMMA .)
     RPAREN          reduce using rule 22 (factor -> GAMMA .)
     RBRACE          reduce using rule 22 (factor -> GAMMA .)
 
 
-state 19
+state 20
 
     (23) factor -> DELTA .
 
@@ -381,12 +445,13 @@ state 19
     DIVIDE          reduce using rule 23 (factor -> DELTA .)
     PLUS            reduce using rule 23 (factor -> DELTA .)
     MINUS           reduce using rule 23 (factor -> DELTA .)
+    NEWLINE         reduce using rule 23 (factor -> DELTA .)
     $end            reduce using rule 23 (factor -> DELTA .)
     RPAREN          reduce using rule 23 (factor -> DELTA .)
     RBRACE          reduce using rule 23 (factor -> DELTA .)
 
 
-state 20
+state 21
 
     (24) factor -> PI .
 
@@ -394,12 +459,13 @@ state 20
     DIVIDE          reduce using rule 24 (factor -> PI .)
     PLUS            reduce using rule 24 (factor -> PI .)
     MINUS           reduce using rule 24 (factor -> PI .)
+    NEWLINE         reduce using rule 24 (factor -> PI .)
     $end            reduce using rule 24 (factor -> PI .)
     RPAREN          reduce using rule 24 (factor -> PI .)
     RBRACE          reduce using rule 24 (factor -> PI .)
 
 
-state 21
+state 22
 
     (1) expression -> expression PLUS . term
     (4) term -> . term TIMES factor
@@ -423,29 +489,31 @@ state 21
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    term                           shift and go to state 36
-    factor                         shift and go to state 3
+    term                           shift and go to state 39
+    factor                         shift and go to state 4
 
-state 22
+state 23
 
     (2) expression -> expression MINUS . term
     (4) term -> . term TIMES factor
@@ -469,29 +537,84 @@ state 22
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    term                           shift and go to state 37
-    factor                         shift and go to state 3
+    term                           shift and go to state 40
+    factor                         shift and go to state 4
 
-state 23
+state 24
+
+    (26) expression -> expression NEWLINE . expression
+    (1) expression -> . expression PLUS term
+    (2) expression -> . expression MINUS term
+    (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
+    (4) term -> . term TIMES factor
+    (5) term -> . term DIVIDE factor
+    (6) term -> . factor
+    (7) factor -> . NUMBER
+    (8) factor -> . VARIABLE
+    (9) factor -> . LPAREN expression RPAREN
+    (10) factor -> . SIN LPAREN expression RPAREN
+    (11) factor -> . COS LPAREN expression RPAREN
+    (12) factor -> . TAN LPAREN expression RPAREN
+    (13) factor -> . LOG LPAREN expression RPAREN
+    (14) factor -> . SQRT LBRACE expression RBRACE
+    (15) factor -> . FRAC LBRACE expression RBRACE LBRACE expression RBRACE
+    (16) factor -> . INT factor
+    (17) factor -> . INT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
+    (18) factor -> . IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
+    (19) factor -> . IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression
+    (20) factor -> . ALPHA
+    (21) factor -> . BETA
+    (22) factor -> . GAMMA
+    (23) factor -> . DELTA
+    (24) factor -> . PI
+    (25) factor -> . MINUS factor
+
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
+
+    expression                     shift and go to state 41
+    term                           shift and go to state 2
+    factor                         shift and go to state 4
+
+state 25
 
     (4) term -> term TIMES . factor
     (7) factor -> . NUMBER
@@ -512,28 +635,30 @@ state 23
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    factor                         shift and go to state 38
+    factor                         shift and go to state 42
 
-state 24
+state 26
 
     (5) term -> term DIVIDE . factor
     (7) factor -> . NUMBER
@@ -554,44 +679,63 @@ state 24
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    factor                         shift and go to state 39
+    factor                         shift and go to state 43
 
-state 25
+state 27
+
+    (25) factor -> MINUS factor .
+
+    TIMES           reduce using rule 25 (factor -> MINUS factor .)
+    DIVIDE          reduce using rule 25 (factor -> MINUS factor .)
+    PLUS            reduce using rule 25 (factor -> MINUS factor .)
+    MINUS           reduce using rule 25 (factor -> MINUS factor .)
+    NEWLINE         reduce using rule 25 (factor -> MINUS factor .)
+    $end            reduce using rule 25 (factor -> MINUS factor .)
+    RPAREN          reduce using rule 25 (factor -> MINUS factor .)
+    RBRACE          reduce using rule 25 (factor -> MINUS factor .)
+
+
+state 28
 
     (9) factor -> LPAREN expression . RPAREN
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
-    RPAREN          shift and go to state 40
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    RPAREN          shift and go to state 44
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
 
-state 26
+state 29
 
     (10) factor -> SIN LPAREN . expression RPAREN
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -613,35 +757,38 @@ state 26
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 41
+    expression                     shift and go to state 45
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 27
+state 30
 
     (11) factor -> COS LPAREN . expression RPAREN
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -663,35 +810,38 @@ state 27
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 42
+    expression                     shift and go to state 46
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 28
+state 31
 
     (12) factor -> TAN LPAREN . expression RPAREN
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -713,35 +863,38 @@ state 28
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 43
+    expression                     shift and go to state 47
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 29
+state 32
 
     (13) factor -> LOG LPAREN . expression RPAREN
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -763,35 +916,38 @@ state 29
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 44
+    expression                     shift and go to state 48
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 30
+state 33
 
     (14) factor -> SQRT LBRACE . expression RBRACE
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -813,35 +969,38 @@ state 30
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 45
+    expression                     shift and go to state 49
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 31
+state 34
 
     (15) factor -> FRAC LBRACE . expression RBRACE LBRACE expression RBRACE
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -863,30 +1022,32 @@ state 31
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 46
+    expression                     shift and go to state 50
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 32
+state 35
 
     (16) factor -> INT factor .
 
@@ -894,17 +1055,19 @@ state 32
     DIVIDE          reduce using rule 16 (factor -> INT factor .)
     PLUS            reduce using rule 16 (factor -> INT factor .)
     MINUS           reduce using rule 16 (factor -> INT factor .)
+    NEWLINE         reduce using rule 16 (factor -> INT factor .)
     $end            reduce using rule 16 (factor -> INT factor .)
     RPAREN          reduce using rule 16 (factor -> INT factor .)
     RBRACE          reduce using rule 16 (factor -> INT factor .)
 
 
-state 33
+state 36
 
     (17) factor -> INT LBRACE . expression RBRACE SUP LBRACE expression RBRACE expression
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -926,35 +1089,38 @@ state 33
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 47
+    expression                     shift and go to state 51
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 34
+state 37
 
     (18) factor -> IINT LBRACE . expression RBRACE SUP LBRACE expression RBRACE expression
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -976,35 +1142,38 @@ state 34
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 48
+    expression                     shift and go to state 52
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 35
+state 38
 
     (19) factor -> IIINT LBRACE . expression RBRACE SUP LBRACE expression RBRACE expression
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -1026,70 +1195,94 @@ state 35
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 49
+    expression                     shift and go to state 53
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 36
+state 39
 
     (1) expression -> expression PLUS term .
     (4) term -> term . TIMES factor
     (5) term -> term . DIVIDE factor
 
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
     PLUS            reduce using rule 1 (expression -> expression PLUS term .)
     MINUS           reduce using rule 1 (expression -> expression PLUS term .)
+    NEWLINE         reduce using rule 1 (expression -> expression PLUS term .)
     $end            reduce using rule 1 (expression -> expression PLUS term .)
     RPAREN          reduce using rule 1 (expression -> expression PLUS term .)
     RBRACE          reduce using rule 1 (expression -> expression PLUS term .)
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 24
+    TIMES           shift and go to state 25
+    DIVIDE          shift and go to state 26
 
   ! TIMES           [ reduce using rule 1 (expression -> expression PLUS term .) ]
   ! DIVIDE          [ reduce using rule 1 (expression -> expression PLUS term .) ]
 
 
-state 37
+state 40
 
     (2) expression -> expression MINUS term .
     (4) term -> term . TIMES factor
     (5) term -> term . DIVIDE factor
 
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
     PLUS            reduce using rule 2 (expression -> expression MINUS term .)
     MINUS           reduce using rule 2 (expression -> expression MINUS term .)
+    NEWLINE         reduce using rule 2 (expression -> expression MINUS term .)
     $end            reduce using rule 2 (expression -> expression MINUS term .)
     RPAREN          reduce using rule 2 (expression -> expression MINUS term .)
     RBRACE          reduce using rule 2 (expression -> expression MINUS term .)
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 24
+    TIMES           shift and go to state 25
+    DIVIDE          shift and go to state 26
 
   ! TIMES           [ reduce using rule 2 (expression -> expression MINUS term .) ]
   ! DIVIDE          [ reduce using rule 2 (expression -> expression MINUS term .) ]
 
 
-state 38
+state 41
+
+    (26) expression -> expression NEWLINE expression .
+    (1) expression -> expression . PLUS term
+    (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    $end            reduce using rule 26 (expression -> expression NEWLINE expression .)
+    RPAREN          reduce using rule 26 (expression -> expression NEWLINE expression .)
+    TIMES           reduce using rule 26 (expression -> expression NEWLINE expression .)
+    DIVIDE          reduce using rule 26 (expression -> expression NEWLINE expression .)
+    RBRACE          reduce using rule 26 (expression -> expression NEWLINE expression .)
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
+
+  ! PLUS            [ reduce using rule 26 (expression -> expression NEWLINE expression .) ]
+  ! MINUS           [ reduce using rule 26 (expression -> expression NEWLINE expression .) ]
+  ! NEWLINE         [ reduce using rule 26 (expression -> expression NEWLINE expression .) ]
+
+
+state 42
 
     (4) term -> term TIMES factor .
 
@@ -1097,12 +1290,13 @@ state 38
     DIVIDE          reduce using rule 4 (term -> term TIMES factor .)
     PLUS            reduce using rule 4 (term -> term TIMES factor .)
     MINUS           reduce using rule 4 (term -> term TIMES factor .)
+    NEWLINE         reduce using rule 4 (term -> term TIMES factor .)
     $end            reduce using rule 4 (term -> term TIMES factor .)
     RPAREN          reduce using rule 4 (term -> term TIMES factor .)
     RBRACE          reduce using rule 4 (term -> term TIMES factor .)
 
 
-state 39
+state 43
 
     (5) term -> term DIVIDE factor .
 
@@ -1110,12 +1304,13 @@ state 39
     DIVIDE          reduce using rule 5 (term -> term DIVIDE factor .)
     PLUS            reduce using rule 5 (term -> term DIVIDE factor .)
     MINUS           reduce using rule 5 (term -> term DIVIDE factor .)
+    NEWLINE         reduce using rule 5 (term -> term DIVIDE factor .)
     $end            reduce using rule 5 (term -> term DIVIDE factor .)
     RPAREN          reduce using rule 5 (term -> term DIVIDE factor .)
     RBRACE          reduce using rule 5 (term -> term DIVIDE factor .)
 
 
-state 40
+state 44
 
     (9) factor -> LPAREN expression RPAREN .
 
@@ -1123,111 +1318,130 @@ state 40
     DIVIDE          reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     PLUS            reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     MINUS           reduce using rule 9 (factor -> LPAREN expression RPAREN .)
+    NEWLINE         reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     $end            reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     RPAREN          reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     RBRACE          reduce using rule 9 (factor -> LPAREN expression RPAREN .)
 
 
-state 41
+state 45
 
     (10) factor -> SIN LPAREN expression . RPAREN
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
-    RPAREN          shift and go to state 50
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
-
-
-state 42
-
-    (11) factor -> COS LPAREN expression . RPAREN
-    (1) expression -> expression . PLUS term
-    (2) expression -> expression . MINUS term
-
-    RPAREN          shift and go to state 51
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
-
-
-state 43
-
-    (12) factor -> TAN LPAREN expression . RPAREN
-    (1) expression -> expression . PLUS term
-    (2) expression -> expression . MINUS term
-
-    RPAREN          shift and go to state 52
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
-
-
-state 44
-
-    (13) factor -> LOG LPAREN expression . RPAREN
-    (1) expression -> expression . PLUS term
-    (2) expression -> expression . MINUS term
-
-    RPAREN          shift and go to state 53
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
-
-
-state 45
-
-    (14) factor -> SQRT LBRACE expression . RBRACE
-    (1) expression -> expression . PLUS term
-    (2) expression -> expression . MINUS term
-
-    RBRACE          shift and go to state 54
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    RPAREN          shift and go to state 54
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
 
 state 46
 
-    (15) factor -> FRAC LBRACE expression . RBRACE LBRACE expression RBRACE
+    (11) factor -> COS LPAREN expression . RPAREN
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
-    RBRACE          shift and go to state 55
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    RPAREN          shift and go to state 55
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
 
 state 47
 
-    (17) factor -> INT LBRACE expression . RBRACE SUP LBRACE expression RBRACE expression
+    (12) factor -> TAN LPAREN expression . RPAREN
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
-    RBRACE          shift and go to state 56
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    RPAREN          shift and go to state 56
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
 
 state 48
 
-    (18) factor -> IINT LBRACE expression . RBRACE SUP LBRACE expression RBRACE expression
+    (13) factor -> LOG LPAREN expression . RPAREN
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
-    RBRACE          shift and go to state 57
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    RPAREN          shift and go to state 57
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
 
 state 49
 
-    (19) factor -> IIINT LBRACE expression . RBRACE SUP LBRACE expression RBRACE expression
+    (14) factor -> SQRT LBRACE expression . RBRACE
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
     RBRACE          shift and go to state 58
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
 
 state 50
+
+    (15) factor -> FRAC LBRACE expression . RBRACE LBRACE expression RBRACE
+    (1) expression -> expression . PLUS term
+    (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
+
+    RBRACE          shift and go to state 59
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
+
+
+state 51
+
+    (17) factor -> INT LBRACE expression . RBRACE SUP LBRACE expression RBRACE expression
+    (1) expression -> expression . PLUS term
+    (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
+
+    RBRACE          shift and go to state 60
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
+
+
+state 52
+
+    (18) factor -> IINT LBRACE expression . RBRACE SUP LBRACE expression RBRACE expression
+    (1) expression -> expression . PLUS term
+    (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
+
+    RBRACE          shift and go to state 61
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
+
+
+state 53
+
+    (19) factor -> IIINT LBRACE expression . RBRACE SUP LBRACE expression RBRACE expression
+    (1) expression -> expression . PLUS term
+    (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
+
+    RBRACE          shift and go to state 62
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
+
+
+state 54
 
     (10) factor -> SIN LPAREN expression RPAREN .
 
@@ -1235,12 +1449,13 @@ state 50
     DIVIDE          reduce using rule 10 (factor -> SIN LPAREN expression RPAREN .)
     PLUS            reduce using rule 10 (factor -> SIN LPAREN expression RPAREN .)
     MINUS           reduce using rule 10 (factor -> SIN LPAREN expression RPAREN .)
+    NEWLINE         reduce using rule 10 (factor -> SIN LPAREN expression RPAREN .)
     $end            reduce using rule 10 (factor -> SIN LPAREN expression RPAREN .)
     RPAREN          reduce using rule 10 (factor -> SIN LPAREN expression RPAREN .)
     RBRACE          reduce using rule 10 (factor -> SIN LPAREN expression RPAREN .)
 
 
-state 51
+state 55
 
     (11) factor -> COS LPAREN expression RPAREN .
 
@@ -1248,12 +1463,13 @@ state 51
     DIVIDE          reduce using rule 11 (factor -> COS LPAREN expression RPAREN .)
     PLUS            reduce using rule 11 (factor -> COS LPAREN expression RPAREN .)
     MINUS           reduce using rule 11 (factor -> COS LPAREN expression RPAREN .)
+    NEWLINE         reduce using rule 11 (factor -> COS LPAREN expression RPAREN .)
     $end            reduce using rule 11 (factor -> COS LPAREN expression RPAREN .)
     RPAREN          reduce using rule 11 (factor -> COS LPAREN expression RPAREN .)
     RBRACE          reduce using rule 11 (factor -> COS LPAREN expression RPAREN .)
 
 
-state 52
+state 56
 
     (12) factor -> TAN LPAREN expression RPAREN .
 
@@ -1261,12 +1477,13 @@ state 52
     DIVIDE          reduce using rule 12 (factor -> TAN LPAREN expression RPAREN .)
     PLUS            reduce using rule 12 (factor -> TAN LPAREN expression RPAREN .)
     MINUS           reduce using rule 12 (factor -> TAN LPAREN expression RPAREN .)
+    NEWLINE         reduce using rule 12 (factor -> TAN LPAREN expression RPAREN .)
     $end            reduce using rule 12 (factor -> TAN LPAREN expression RPAREN .)
     RPAREN          reduce using rule 12 (factor -> TAN LPAREN expression RPAREN .)
     RBRACE          reduce using rule 12 (factor -> TAN LPAREN expression RPAREN .)
 
 
-state 53
+state 57
 
     (13) factor -> LOG LPAREN expression RPAREN .
 
@@ -1274,12 +1491,13 @@ state 53
     DIVIDE          reduce using rule 13 (factor -> LOG LPAREN expression RPAREN .)
     PLUS            reduce using rule 13 (factor -> LOG LPAREN expression RPAREN .)
     MINUS           reduce using rule 13 (factor -> LOG LPAREN expression RPAREN .)
+    NEWLINE         reduce using rule 13 (factor -> LOG LPAREN expression RPAREN .)
     $end            reduce using rule 13 (factor -> LOG LPAREN expression RPAREN .)
     RPAREN          reduce using rule 13 (factor -> LOG LPAREN expression RPAREN .)
     RBRACE          reduce using rule 13 (factor -> LOG LPAREN expression RPAREN .)
 
 
-state 54
+state 58
 
     (14) factor -> SQRT LBRACE expression RBRACE .
 
@@ -1287,45 +1505,47 @@ state 54
     DIVIDE          reduce using rule 14 (factor -> SQRT LBRACE expression RBRACE .)
     PLUS            reduce using rule 14 (factor -> SQRT LBRACE expression RBRACE .)
     MINUS           reduce using rule 14 (factor -> SQRT LBRACE expression RBRACE .)
+    NEWLINE         reduce using rule 14 (factor -> SQRT LBRACE expression RBRACE .)
     $end            reduce using rule 14 (factor -> SQRT LBRACE expression RBRACE .)
     RPAREN          reduce using rule 14 (factor -> SQRT LBRACE expression RBRACE .)
     RBRACE          reduce using rule 14 (factor -> SQRT LBRACE expression RBRACE .)
 
 
-state 55
+state 59
 
     (15) factor -> FRAC LBRACE expression RBRACE . LBRACE expression RBRACE
 
-    LBRACE          shift and go to state 59
+    LBRACE          shift and go to state 63
 
 
-state 56
+state 60
 
     (17) factor -> INT LBRACE expression RBRACE . SUP LBRACE expression RBRACE expression
 
-    SUP             shift and go to state 60
+    SUP             shift and go to state 64
 
 
-state 57
+state 61
 
     (18) factor -> IINT LBRACE expression RBRACE . SUP LBRACE expression RBRACE expression
 
-    SUP             shift and go to state 61
+    SUP             shift and go to state 65
 
 
-state 58
+state 62
 
     (19) factor -> IIINT LBRACE expression RBRACE . SUP LBRACE expression RBRACE expression
 
-    SUP             shift and go to state 62
+    SUP             shift and go to state 66
 
 
-state 59
+state 63
 
     (15) factor -> FRAC LBRACE expression RBRACE LBRACE . expression RBRACE
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -1347,67 +1567,72 @@ state 59
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 63
+    expression                     shift and go to state 67
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 60
+state 64
 
     (17) factor -> INT LBRACE expression RBRACE SUP . LBRACE expression RBRACE expression
 
-    LBRACE          shift and go to state 64
+    LBRACE          shift and go to state 68
 
 
-state 61
+state 65
 
     (18) factor -> IINT LBRACE expression RBRACE SUP . LBRACE expression RBRACE expression
 
-    LBRACE          shift and go to state 65
+    LBRACE          shift and go to state 69
 
 
-state 62
+state 66
 
     (19) factor -> IIINT LBRACE expression RBRACE SUP . LBRACE expression RBRACE expression
 
-    LBRACE          shift and go to state 66
+    LBRACE          shift and go to state 70
 
 
-state 63
+state 67
 
     (15) factor -> FRAC LBRACE expression RBRACE LBRACE expression . RBRACE
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
-    RBRACE          shift and go to state 67
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    RBRACE          shift and go to state 71
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
 
-state 64
+state 68
 
     (17) factor -> INT LBRACE expression RBRACE SUP LBRACE . expression RBRACE expression
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -1429,35 +1654,38 @@ state 64
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 68
+    expression                     shift and go to state 72
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 65
+state 69
 
     (18) factor -> IINT LBRACE expression RBRACE SUP LBRACE . expression RBRACE expression
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -1479,35 +1707,38 @@ state 65
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 69
+    expression                     shift and go to state 73
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 66
+state 70
 
     (19) factor -> IIINT LBRACE expression RBRACE SUP LBRACE . expression RBRACE expression
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -1529,30 +1760,32 @@ state 66
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 70
+    expression                     shift and go to state 74
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 67
+state 71
 
     (15) factor -> FRAC LBRACE expression RBRACE LBRACE expression RBRACE .
 
@@ -1560,50 +1793,58 @@ state 67
     DIVIDE          reduce using rule 15 (factor -> FRAC LBRACE expression RBRACE LBRACE expression RBRACE .)
     PLUS            reduce using rule 15 (factor -> FRAC LBRACE expression RBRACE LBRACE expression RBRACE .)
     MINUS           reduce using rule 15 (factor -> FRAC LBRACE expression RBRACE LBRACE expression RBRACE .)
+    NEWLINE         reduce using rule 15 (factor -> FRAC LBRACE expression RBRACE LBRACE expression RBRACE .)
     $end            reduce using rule 15 (factor -> FRAC LBRACE expression RBRACE LBRACE expression RBRACE .)
     RPAREN          reduce using rule 15 (factor -> FRAC LBRACE expression RBRACE LBRACE expression RBRACE .)
     RBRACE          reduce using rule 15 (factor -> FRAC LBRACE expression RBRACE LBRACE expression RBRACE .)
 
 
-state 68
+state 72
 
     (17) factor -> INT LBRACE expression RBRACE SUP LBRACE expression . RBRACE expression
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
-    RBRACE          shift and go to state 71
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    RBRACE          shift and go to state 75
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
 
-state 69
+state 73
 
     (18) factor -> IINT LBRACE expression RBRACE SUP LBRACE expression . RBRACE expression
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
-    RBRACE          shift and go to state 72
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    RBRACE          shift and go to state 76
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
 
-state 70
+state 74
 
     (19) factor -> IIINT LBRACE expression RBRACE SUP LBRACE expression . RBRACE expression
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
-    RBRACE          shift and go to state 73
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    RBRACE          shift and go to state 77
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
 
-state 71
+state 75
 
     (17) factor -> INT LBRACE expression RBRACE SUP LBRACE expression RBRACE . expression
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -1625,35 +1866,38 @@ state 71
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 74
+    expression                     shift and go to state 78
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 72
+state 76
 
     (18) factor -> IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE . expression
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -1675,35 +1919,38 @@ state 72
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 75
+    expression                     shift and go to state 79
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 73
+state 77
 
     (19) factor -> IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE . expression
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
+    (26) expression -> . expression NEWLINE expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -1725,100 +1972,116 @@ state 73
     (22) factor -> . GAMMA
     (23) factor -> . DELTA
     (24) factor -> . PI
+    (25) factor -> . MINUS factor
 
-    NUMBER          shift and go to state 4
-    VARIABLE        shift and go to state 5
-    LPAREN          shift and go to state 6
-    SIN             shift and go to state 7
-    COS             shift and go to state 8
-    TAN             shift and go to state 9
-    LOG             shift and go to state 10
-    SQRT            shift and go to state 11
-    FRAC            shift and go to state 12
-    INT             shift and go to state 13
-    IINT            shift and go to state 14
-    IIINT           shift and go to state 15
-    ALPHA           shift and go to state 16
-    BETA            shift and go to state 17
-    GAMMA           shift and go to state 18
-    DELTA           shift and go to state 19
-    PI              shift and go to state 20
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 6
+    LPAREN          shift and go to state 7
+    SIN             shift and go to state 8
+    COS             shift and go to state 9
+    TAN             shift and go to state 10
+    LOG             shift and go to state 11
+    SQRT            shift and go to state 12
+    FRAC            shift and go to state 13
+    INT             shift and go to state 14
+    IINT            shift and go to state 15
+    IIINT           shift and go to state 16
+    ALPHA           shift and go to state 17
+    BETA            shift and go to state 18
+    GAMMA           shift and go to state 19
+    DELTA           shift and go to state 20
+    PI              shift and go to state 21
+    MINUS           shift and go to state 3
 
-    expression                     shift and go to state 76
+    expression                     shift and go to state 80
     term                           shift and go to state 2
-    factor                         shift and go to state 3
+    factor                         shift and go to state 4
 
-state 74
+state 78
 
     (17) factor -> INT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
   ! shift/reduce conflict for PLUS resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
     TIMES           reduce using rule 17 (factor -> INT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
     DIVIDE          reduce using rule 17 (factor -> INT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
     $end            reduce using rule 17 (factor -> INT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
     RPAREN          reduce using rule 17 (factor -> INT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
     RBRACE          reduce using rule 17 (factor -> INT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
   ! PLUS            [ reduce using rule 17 (factor -> INT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .) ]
   ! MINUS           [ reduce using rule 17 (factor -> INT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .) ]
+  ! NEWLINE         [ reduce using rule 17 (factor -> INT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .) ]
 
 
-state 75
+state 79
 
     (18) factor -> IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
   ! shift/reduce conflict for PLUS resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
     TIMES           reduce using rule 18 (factor -> IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
     DIVIDE          reduce using rule 18 (factor -> IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
     $end            reduce using rule 18 (factor -> IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
     RPAREN          reduce using rule 18 (factor -> IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
     RBRACE          reduce using rule 18 (factor -> IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
   ! PLUS            [ reduce using rule 18 (factor -> IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .) ]
   ! MINUS           [ reduce using rule 18 (factor -> IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .) ]
+  ! NEWLINE         [ reduce using rule 18 (factor -> IINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .) ]
 
 
-state 76
+state 80
 
     (19) factor -> IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
+    (26) expression -> expression . NEWLINE expression
 
   ! shift/reduce conflict for PLUS resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
     TIMES           reduce using rule 19 (factor -> IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
     DIVIDE          reduce using rule 19 (factor -> IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
     $end            reduce using rule 19 (factor -> IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
     RPAREN          reduce using rule 19 (factor -> IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
     RBRACE          reduce using rule 19 (factor -> IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .)
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    PLUS            shift and go to state 22
+    MINUS           shift and go to state 23
+    NEWLINE         shift and go to state 24
 
   ! PLUS            [ reduce using rule 19 (factor -> IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .) ]
   ! MINUS           [ reduce using rule 19 (factor -> IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .) ]
+  ! NEWLINE         [ reduce using rule 19 (factor -> IIINT LBRACE expression RBRACE SUP LBRACE expression RBRACE expression .) ]
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
 WARNING: shift/reduce conflict for TIMES in state 2 resolved as shift
 WARNING: shift/reduce conflict for DIVIDE in state 2 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 36 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 36 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 37 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 37 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 74 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 74 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 75 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 75 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 76 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 76 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 41 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 41 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 41 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 78 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 78 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 78 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 79 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 79 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 79 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 80 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 80 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 80 resolved as shift

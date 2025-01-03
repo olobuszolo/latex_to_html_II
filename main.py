@@ -17,9 +17,11 @@ def save_to_html_file(html_content, filename="output.html"):
 
 if __name__ == "__main__":
     latex_input = (
-        r"\alpha + \beta \cdot \gamma + \delta + \sin(\gamma + 4) + \cos(\beta) \cdot \frac{1}{2} + \tan(1) + \log(10) + \sqrt{9} + "
+        r"\alpha + \beta \cdot \gamma  \\ \delta + \sin(\gamma + 4) + \cos(\beta) \cdot \frac{1}{2} + \tan(1) + \log(10) + \sqrt{9} + "
         r"\pi + "
-        r"\int_{0}^{1} \sin(x) + \iint_{0}^{1} \frac{\beta}{\beta} + \iiint_{0}^{1} \cos(x) + \frac{1}{2} + \frac{1}{3} + \frac{\alpha}{4}"
+        r"\int \sin(x) + \int \frac{\beta}{\beta} + \int \cos(x) + \frac{1}{2} + \frac{1}{3} + \frac{\alpha}{4} - "
+        r"\alpha + 2 \cdot \pi \\"
+        r"x + y"
     )
     html_output = latex_to_html(latex_input)
     if html_output:

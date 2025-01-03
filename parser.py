@@ -1,6 +1,13 @@
 import ply.yacc as yacc
 from lexer import tokens
 
+precedence = (
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'TIMES', 'DIVIDE'),
+    ('right', 'UMINUS'),
+)
+
+
 def p_expression_binop(p):
     '''expression : expression PLUS term
                   | expression MINUS term'''
@@ -133,6 +140,14 @@ def p_factor_delta(p):
 def p_factor_pi(p):
     'factor : PI'
     p[0] = '&pi;'
+
+def p_factor_uminus(p):
+    'factor : MINUS factor %prec UMINUS'
+    p[0] = f"-{p[2]}"
+
+def p_expression_newline(p):
+    'expression : expression NEWLINE expression'
+    p[0] = f"{p[1]}<br>{p[3]}"
 
 def p_error(p):
     print(f"Syntax error at {p.value if p else 'EOF'}")
