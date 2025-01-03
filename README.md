@@ -76,7 +76,7 @@ latex_input = (
     r"x + 3 + 4^\alpha"
 )
 
-   W celu zwiększenia czytelności w latex_input możemy umieszczać pare lini tekstu, jednak dla translatora kluczowe w uzyskaniu nowej lini jako rezulat jest symbol "\\". Bez niego nie uzyskamy nowej lini jako rezultat.
-   W powyższym przykładzie mamy wynik jako 3 linijki.
+W celu zwiększenia czytelności w latex_input możemy umieszczać pare lini tekstu, jednak dla translatora kluczowe w uzyskaniu nowej lini jako rezulat jest symbol "\\". Bez niego nie uzyskamy nowej lini jako rezultat.
+W powyższym przykładzie mamy wynik jako 3 linijki.
 
-   Po wykonaniu programu generuje nam się plik **output.html**. Następnie należy go przeciągnąć w okienko ulubionej przeglądarki internetowej i cieszyć się wynikiem działania programu.  
+Po wykonaniu programu generuje nam się plik **output.html**. Następnie należy go przeciągnąć w okienko ulubionej przeglądarki internetowej i cieszyć się wynikiem działania programu.  
