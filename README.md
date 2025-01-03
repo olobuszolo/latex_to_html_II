@@ -63,8 +63,12 @@ Projekt służy do konwersji matematycznych wyrażeń zapisanych w LaTeX na form
 
 ## Jak korzystać z programu
    W pliku **main.py** należy umieścić ciąg sekwencji, które chcemy przetłmaczyć z formy latex do html.
-   Należy pamiętać, że umieszczany tekst musi być w formie: **r"tekst..."**
-   Jeśli chcemy, aby w pliku html tekst pojawił się w nowej lini, to w miejscu outputu umieszczamy symbol "\\"
+   Należy pamiętać, że umieszczany tekst musi być w formie: **r"tekst..."**.
+   Jeśli chcemy, aby w pliku html tekst pojawił się w nowej lini, to w miejscu outputu umieszczamy symbol "\\".
+   W celu zwiększenia czytelności w latex_input możemy umieszczać pare lini tekstu, jednak dla translatora kluczowe w uzyskaniu nowej lini jako rezulat jest symbol "\\". Bez niego nie uzyskamy nowej lini jako rezultat.
+   W poniższym przykładzie mamy wynik jako 3 linijki.
+
+Po wykonaniu programu generuje nam się plik **output.html**. Następnie należy go przeciągnąć w okienko ulubionej przeglądarki internetowej i cieszyć się wynikiem działania programu.  
 
 ### Przykład:
 ```python
@@ -76,7 +80,3 @@ latex_input = (
     r"x + 3 + 4^\alpha"
 )
 
-W celu zwiększenia czytelności w latex_input możemy umieszczać pare lini tekstu, jednak dla translatora kluczowe w uzyskaniu nowej lini jako rezulat jest symbol "\\". Bez niego nie uzyskamy nowej lini jako rezultat.
-W powyższym przykładzie mamy wynik jako 3 linijki.
-
-Po wykonaniu programu generuje nam się plik **output.html**. Następnie należy go przeciągnąć w okienko ulubionej przeglądarki internetowej i cieszyć się wynikiem działania programu.  
