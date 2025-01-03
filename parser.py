@@ -5,6 +5,7 @@ precedence = (
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
     ('right', 'UMINUS'),
+    ('right', 'SUP')
 )
 
 
@@ -148,6 +149,10 @@ def p_factor_uminus(p):
 def p_expression_newline(p):
     'expression : expression NEWLINE expression'
     p[0] = f"{p[1]}<br>{p[3]}"
+
+def p_factor_power(p):
+    'factor : factor SUP factor'
+    p[0] = f"({p[1]}<sup>{p[3]}</sup>)"
 
 def p_error(p):
     print(f"Syntax error at {p.value if p else 'EOF'}")

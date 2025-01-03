@@ -21,7 +21,7 @@ if __name__ == "__main__":
         r"\pi + "
         r"\int \sin(x) + \int \frac{\beta}{\beta} + \int \cos(x) + \frac{1}{2} + \frac{1}{3} + \frac{\alpha}{4} - "
         r"\alpha + 2 \cdot \pi \\"
-        r"x + y"
+        r"x + 3 - 4^\alpha"
     )
     html_output = latex_to_html(latex_input)
     if html_output:

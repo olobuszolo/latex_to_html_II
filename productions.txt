@@ -59,5 +59,39 @@
 
 21. expression -> expression SUP expression
 
+W postaci BNF:
+
+<expression> ::= <expression> "PLUS" <term>
+               | <expression> "MINUS" <term>
+               | <term>
+               | <expression> "NEWLINE" <expression>
+
+<term> ::= <term> "TIMES" <factor>
+         | <term> "DIVIDE" <factor>
+         | <factor>
+
+<factor> ::= "NUMBER"
+           | "VARIABLE"
+           | "LPAREN" <expression> "RPAREN"
+           | "MINUS" <factor> %prec "UMINUS"
+           | <factor> "SUP" <factor>
+           | "SIN" "LPAREN" <expression> "RPAREN"
+           | "COS" "LPAREN" <expression> "RPAREN"
+           | "TAN" "LPAREN" <expression> "RPAREN"
+           | "LOG" "LPAREN" <expression> "RPAREN"
+           | "SQRT" "LBRACE" <expression> "RBRACE"
+           | "FRAC" "LBRACE" <expression> "RBRACE" "LBRACE" <expression> "RBRACE"
+           | <integral>
+           | "ALPHA"
+           | "BETA"
+           | "GAMMA"
+           | "DELTA"
+           | "PI"
+
+<integral> ::= "INT" <factor>
+             | "INT" "LBRACE" <expression> "RBRACE" "SUP" "LBRACE" <expression> "RBRACE" <expression>
+             | "IINT" "LBRACE" <expression> "RBRACE" "SUP" "LBRACE" <expression> "RBRACE" <expression>
+             | "IIINT" "LBRACE" <expression> "RBRACE" "SUP" "LBRACE" <expression> "RBRACE" <expression>
+
 
 start = 'expression'

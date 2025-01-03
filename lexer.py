@@ -34,7 +34,6 @@ t_DELTA = r'\\delta'
 t_PI = r'\\pi'
 t_NEWLINE = r'\\\\'
 
-
 t_ignore = ' \t'
 
 def t_NUMBER(t):
