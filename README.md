@@ -59,12 +59,15 @@ Projekt służy do konwersji matematycznych wyrażeń zapisanych w LaTeX na form
 5. **`productions.txt`**  
    Zawiera listę wszystkich reguł gramatycznych użytych w parserze.
 
+---
+
 ## Jak korzystać z programu
    W pliku **main.py** należy umieścić ciąg sekwencji, które chcemy przetłmaczyć z formy latex do html.
    Należy pamiętać, że umieszczany tekst musi być w formie: **r"tekst..."**
    Jeśli chcemy, aby w pliku html tekst pojawił się w nowej lini, to w miejscu outputu umieszczamy symbol "\\"
 
    Przykład: 
+   '''python
        latex_input = (
         r"\alpha + \beta \cdot \gamma  \\ \delta + \sin(\gamma + 4) + \cos(\beta) \cdot \frac{1}{2} + \tan(1) + \log(10) + \sqrt{9} + "
         r"\pi + "
