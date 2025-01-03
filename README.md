@@ -66,15 +66,15 @@ Projekt służy do konwersji matematycznych wyrażeń zapisanych w LaTeX na form
    Należy pamiętać, że umieszczany tekst musi być w formie: **r"tekst..."**
    Jeśli chcemy, aby w pliku html tekst pojawił się w nowej lini, to w miejscu outputu umieszczamy symbol "\\"
 
-   Przykład: 
-   '''python
-       latex_input = (
-        r"\alpha + \beta \cdot \gamma  \\ \delta + \sin(\gamma + 4) + \cos(\beta) \cdot \frac{1}{2} + \tan(1) + \log(10) + \sqrt{9} + "
-        r"\pi + "
-        r"\int \sin(x) + \int \frac{\beta}{\beta} + \int \cos(x) + \frac{1}{2} + \frac{1}{3} + \frac{\alpha}{4} - "
-        r"\alpha + 2 \cdot \pi \\"
-        r"x + 3 + 4^\alpha"
-    ) 
+### Przykład:
+```python
+latex_input = (
+    r"\alpha + \beta \cdot \gamma  \\ \delta + \sin(\gamma + 4) + \cos(\beta) \cdot \frac{1}{2} + \tan(1) + \log(10) + \sqrt{9} + "
+    r"\pi + "
+    r"\int \sin(x) + \int \frac{\beta}{\beta} + \int \cos(x) + \frac{1}{2} + \frac{1}{3} + \frac{\alpha}{4} - "
+    r"\alpha + 2 \cdot \pi \\"
+    r"x + 3 + 4^\alpha"
+)
 
    W celu zwiększenia czytelności w latex_input możemy umieszczać pare lini tekstu, jednak dla translatora kluczowe w uzyskaniu nowej lini jako rezulat jest symbol "\\". Bez niego nie uzyskamy nowej lini jako rezultat.
    W powyższym przykładzie mamy wynik jako 3 linijki.
